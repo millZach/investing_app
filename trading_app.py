@@ -44,6 +44,10 @@ if page_select == 'Targeted Volitility':
         stock_df_merged, stats_df, stats_dict, view_stats = tf.key_statistics(
             stock_dict_ret, target_vol, bond)
 
+        st.write(f"{tickers[0]} Current Price: ${round(df_etf['Adj Close'][-1],2)}")
+        st.write(f"{tickers[1]} Current Price: ${round(df_bond['Adj Close'][-1],2)}")
+        st.write(f"{tickers[0]} Today's Gain/Loss: {round(df_etf['Returns'][-1],2)*100}%")
+        st.write(f"{tickers[1]} Today's Gain/Loss: {round(df_bond['Returns'][-1],2)*100}%")
         tf.plot_stocks(stock_dict, tickers)
         st.pyplot()
         tf.allocation_pie_chart(stats_dict, tickers)
@@ -51,10 +55,6 @@ if page_select == 'Targeted Volitility':
         tf.correlation_heat_map(stock_df_merged)
         st.pyplot()
         st.write(view_stats)
-        st.sidebar.text(f"{tickers[0]} Current Price: ${round(df_etf['Adj Close'][-1],2)}")
-        st.sidebar.text(f"{tickers[0]} Current Price: ${round(df_bond['Adj Close'][-1],2)}")
-        st.sidebar.text(f"{tickers[0]} Today's Gain/Loss: {round(df_etf['Returns'][-1],2)*100}%")
-        st.sidebar.text(f"{tickers[0]} Today's Gain/Loss: {round(df_bond['Returns'][-1],2)*100}%")
 
 
 if page_select == 'Simple Moving Average':
