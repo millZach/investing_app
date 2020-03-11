@@ -54,13 +54,12 @@ def correlation_heat_map(df_merged):
     df_corr = df_merged.corr()
     plot = sns.heatmap(df_corr, cmap='coolwarm')
     plt.title('Correlation Heatmap')
+    plt.tight_layout()
 
-    return plot
 
-
-def plot_200ma(start_date, end_date, window):
-    df_dict = stock_data_grab(['SPY'], '2000-01-01', end_date)
-    df = df_dict['SPY']
+def plot_200ma(ticker, start_date, end_date, window):
+    df_dict = stock_data_grab([ticker], '2000-01-01', end_date)
+    df = df_dict[ticker]
     df[f'{window} SMA'] = df['Adj Close'].rolling(window=window, min_periods=0).mean()
     df[f'Below {window} SMA'] = np.where(
         df[f'{window} SMA'] > df['Adj Close'], df['Adj Close'], None)
@@ -76,6 +75,9 @@ def plot_200ma(start_date, end_date, window):
     plt.legend(
         ['Adj Close', f'{window} SMA', f'Below {window} SMA']
     )
+    plt.tight_layout()
+
+    return df
 
 
 def allocation_pie_chart(stats_dict, tickers):
@@ -96,3 +98,23 @@ def allocation_pie_chart(stats_dict, tickers):
     ax1.axis('equal')
     ax1.set_title('Allocation')
     ax1.legend(labels)
+    plt.tight_layout()
+
+
+def plot_stocks(stock_dict, tickers):
+
+    df_etf = stock_dict[tickers[0]]
+    df_bond = stock_dict[tickers[1]]
+    x = df_etf.index
+    yetf = df_etf['Adj Close']
+    ybond = df_bond['Adj Close']
+
+    fig = plt.figure()
+
+    plt.plot(x, yetf, c='#2D2926FF')
+    plt.plot(x, ybond, c='#E94B3CFF')
+    fig.autofmt_xdate()
+    plt.xlabel('Date', fontsize=16)
+    plt.ylabel('Value (USD)', fontsize=16)
+    plt.legend(tickers)
+    plt.tight_layout()
